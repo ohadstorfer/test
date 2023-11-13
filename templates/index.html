@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Input Form</title>
+</head>
+<body>
+    <h1>WELCOME </h1>
+    <br><br><br><br>
+
+
+    
+    <h1>Simple Module</h1>
+
+    <form id="simpForm">
+        <label for="simpNum1">Number 1:</label>
+        <input type="number" id="simpNum1" required>
+        <br>
+        <label for="simpNum2">Number 2:</label>
+        <input type="number" id="simpNum2" required>
+        <br>
+        <button type="button" onclick="sumNums()">sum numbers</button>
+        <button type="button" onclick="subtractNums()">subtract numbers</button>
+        <br>
+    </form>
+
+
+    <br><br><br><br>
+
+
+    <h1>Compicated Module</h1>
+    <form id="compForm">
+        
+        <label for="compNumber">Number:</label>
+        <input type="number" id="compNumber" required>
+        <br>
+
+        <button type="button" onclick="callCompSumOfDigits()">sum digits</button>
+        <button type="button" onclick="callCompIsPalindrome()">is this a palindrom?</button>
+    </form>
+
+    <div id="result"></div>
+    
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        let simpFunctionCalled = false;
+        // Simp Module Functions
+        function sumNum() {
+            simpFunctionCalled = true;
+            const num1 = document.getElementById('simpNum1').value;
+            const num2 = document.getElementById('simpNum2').value;
+
+            axios.post('/call_simp_add', { num1, num2 })
+                .then(response => {
+                    displayResult(response.data.result);
+                })
+                .catch(error => {
+                    displayError(error.response.data.error);
+                });
+        }
+
+
+
+
+
+        function subtractNums() {
+            simpFunctionCalled = true;
+
+            const num1 = document.getElementById('simpNum1').value;
+            const num2 = document.getElementById('simpNum2').value;
+
+            axios.post('/call_simp_subtract', { num1, num2 })
+                .then(response => {
+                    displayResult(response.data.result);
+                })
+                .catch(error => {
+                    displayError(error.response.data.error);
+                });
+        }
+
+
+
+
+
+
+        function callCompSumOfDigits() {
+            if (!simpFunctionCalled) {
+                displayResult("You must call at least one function in simp module before calling functions in comp module.")
+            return
+            }
+            const number = document.getElementById('compNumber').value;
+
+            axios.post('/call_comp_sum_of_digits', { number })
+                .then(response => {
+                    displayResult(response.data.result);
+                })
+                .catch(error => {
+                    displayError(error.response.data.error);
+                });
+        }
+
+
+
+
+
+        function callCompIsPalindrome() {
+            if (!simpFunctionCalled) {
+                displayResult("You must call at least one function in simp module before calling functions in comp module.")
+            return
+            }
+            const number = document.getElementById('compNumber').value;
+
+            axios.post('/call_comp_ispal', { number })
+                .then(response => {
+                    displayResult(response.data.result);
+                })
+                .catch(error => {
+                    displayError(error.response.data.error);
+                });
+        }
+
+
+
+
+        function displayResult(result) {
+            document.getElementById('result').innerHTML = `Result: ${result}`;
+        }
+
+        // Display Error
+        function displayError(error) {
+            document.getElementById('result').innerHTML = `Error: ${error}`;
+        }
+
+
+
+
+    </script>
+</body>
+</html>
